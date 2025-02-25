@@ -1,4 +1,5 @@
-import type { NextAuthConfig } from 'next-auth'
+// import type { NextAuthConfig } from 'next-auth'
+// import type { AuthOptions } from "next-auth"
 import Credentials from 'next-auth/providers/credentials'
 import { auth } from './auth'
 
@@ -23,4 +24,5 @@ export const authConfig = {
     },
     // providers: [auth()]
     providers: [Credentials({})]
-} satisfies NextAuthConfig
+} 
+// satisfies NextAuthConfig
