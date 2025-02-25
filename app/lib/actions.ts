@@ -4,7 +4,7 @@ import { sql } from '@vercel/postgres'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
-import { AuthError } from 'next-auth'
+// import { AuthError } from 'next-auth'
 import { signIn, signOut } from '@/auth'
 import { db } from './db'
 
@@ -126,7 +126,8 @@ export async function authenticate(
             redirect: true,
         })
     } catch (error: any) {
-        if (error instanceof AuthError) {
+        // instanceof AuthError
+        if (error) {
         switch (error.type) {
             case 'CredentialsSignin':
                 return 'Invalid credentials.'
