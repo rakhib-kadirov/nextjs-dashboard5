@@ -5,7 +5,7 @@ import { plusJakarta } from '@/app/ui/fonts'
 import { Metadata } from 'next'
 import QueryProvider from './QueryProvider'
 import React from 'react'
-// import SessionProvider from './ui/SessionProvider'
+import SessionProvider from './ui/SessionProvider'
 // import { useSession } from 'next-auth/react'
 // import { useRouter } from 'next/navigation'
 
