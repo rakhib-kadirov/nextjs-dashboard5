@@ -55,6 +55,12 @@ export async function POST(req: NextRequest) {
             userId: userId,
             first_name: first_name,
             last_name: last_name,
+        },
+        select: {
+            text: true,
+            userId: true,
+            first_name: true,
+            last_name: true,
         }
     })
     return NextResponse.json(message)
