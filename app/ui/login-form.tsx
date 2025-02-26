@@ -38,7 +38,7 @@ export default function LoginForm() {
       <form action={formAction} className={`${plusJakarta.className}`}>
         <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4">
           <h1 className={`mb-3 text-center text-[16px]`}>
-            Авторизация
+            Авторизация!!!
           </h1>
           <div className="w-full">
             <div>
