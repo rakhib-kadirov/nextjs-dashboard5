@@ -1,7 +1,7 @@
 import AcmeLogo from "@/app/ui/acme-logo"
 import LoginForm from "@/app/ui/login-form"
 import Link from "next/link"
-import { Suspense } from 'react';
+// import { Suspense } from 'react';
 
 export default function LoginPage() {
     return (
@@ -12,9 +12,9 @@ export default function LoginPage() {
                         <AcmeLogo />
                     </div>
                 </div>
-                <Suspense>
+                {/* <Suspense> */}
                     <LoginForm />
-                </Suspense>
+                {/* </Suspense> */}
                 <p className="flex justify-center">или&nbsp;<Link href='/register' className='text-blue-500'>зарегистрироваться</Link></p>
             </div>
         </main>
