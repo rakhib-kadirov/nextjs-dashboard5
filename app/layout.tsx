@@ -4,7 +4,7 @@ import '@/app/ui/global.css'
 import { plusJakarta } from '@/app/ui/fonts'
 import { Metadata } from 'next'
 import QueryProvider from './QueryProvider'
-import React from 'react'
+import React, { Suspense } from 'react'
 import SessionProvider from './ui/SessionProvider'
 // import { useSession } from 'next-auth/react'
 // import { useRouter } from 'next/navigation'
@@ -29,7 +29,9 @@ export default async function RootLayout({
         <QueryProvider>
           <SessionProvider>
             <body className={`${plusJakarta.className} antialiased`}>
-              {children}
+              <Suspense fallback={<div>Загружается...</div>}>
+                {children}
+              </Suspense>
             </body>
           </SessionProvider>
         </QueryProvider>
