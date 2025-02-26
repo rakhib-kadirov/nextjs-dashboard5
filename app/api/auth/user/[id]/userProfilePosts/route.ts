@@ -9,7 +9,7 @@ export async function POST(request: Request) {
         const dateNow = new Date(Date.now())
         const [result] = await db.query(
             "INSERT INTO posts_user (users_id, body_text, date) VALUES (?, ?, ?)",
-            [session.user.id, body_text, dateNow]
+            [session?.user.id, body_text, dateNow]
         )
 
         return NextResponse.json(

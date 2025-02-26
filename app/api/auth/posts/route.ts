@@ -15,7 +15,7 @@ export async function GET() {
             // WHERE users.first_name = ? AND users.last_name = ?
         const [posts] = await db.query(sql)
 
-        return NextResponse.json({ posts: posts, user: session.user })
+        return NextResponse.json({ posts: posts, user: session?.user })
     } catch (error: any) {
         console.error("Ошибка: Ошибка поиска постов!", error.message)
 
