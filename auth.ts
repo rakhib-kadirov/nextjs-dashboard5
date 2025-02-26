@@ -1,5 +1,4 @@
-import NextAuth from "next-auth";
-import { JWT, Session } from "next-auth";
+import NextAuth, { JWT, NextAuthConfig, Session } from "next-auth";
 // import { authConfig } from "./auth.config";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
@@ -73,7 +72,7 @@ async function getUser(login: string): Promise<User | undefined> {
     }
 }
 
-export const authConfig = ({
+export const authConfig: NextAuthConfig = ({
     // ...authConfig,
     providers: [
         CredentialsProvider({
@@ -156,7 +155,7 @@ export const authConfig = ({
         error: "/login"
     },
     callbacks: {
-        async jwt({ token, user }: { token: JWT; user?: User }) {
+        async jwt({ token, user }) {
             // console.log("JWT CALLBACK - Before:", token);
             // console.log("JWT CALLBACK - User:", user);
 
@@ -172,7 +171,7 @@ export const authConfig = ({
             // console.log("JWT CALLBACK - After:", token);
             return token
         },
-        async session({ session, token }: { session: Session; token: JWT }) {
+        async session({ session, token }) {
             // console.log("SESSION CALLBACK - Token:", token);
             // if (token) {
             //     const [rows]: any = await db.query('SELECT id, login, first_name, last_name, profile_photo FROM users WHERE login = ?', [token.login])

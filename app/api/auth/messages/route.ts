@@ -1,21 +1,26 @@
 import { auth } from "@/auth";
+import { authConfig } from "@/auth.config";
 import { PrismaClient } from "@prisma/client";
+import NextAuth from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient()
 
 export async function GET() {
-    const session = auth()
-
+    const session = await auth()
+    // const session = NextAuth(authConfig)
+    console.log('SESSION USER NAME: ', session?.user.first_name)
     const messages = await prisma.message.findMany({
         where: {
-            users: {
-                first_name: session?.user?.first_name,
-                last_name: session?.user?.last_name,
-            }
+            // first_name: session?.user.first_name as string,
+            // last_name: session?.user.last_name as string,
+            // users: {
+            //     first_name: session?.user.first_name as string,
+            //     last_name: session?.user.last_name as string,
+            // }
         },
         orderBy: {
-            createdAt: 'desc'
+            createdAt: 'asc'
         },
         select: {
             id: true,

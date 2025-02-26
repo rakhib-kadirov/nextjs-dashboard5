@@ -18,17 +18,17 @@ model posts_user {
   id_post    Int      @id @unique(map: "id_post_UNIQUE") @default(autoincrement())
   users_id   Int
   body_text  String   @db.VarChar(1000)
-  date       DateTime @default(now()) @db.Timestamp(0)
-  first_name String   @db.VarChar(255)
-  last_name  String   @db.VarChar(255)
+  date       DateTime @db.Timestamp(0)
+  first_name String   @db.Text
+  last_name  String   @db.Text
 }
 
 model users {
   id            Int       @id @unique(map: "id_UNIQUE") @default(autoincrement())
-  login         String    @default("-") @db.VarChar(45)
-  password      String    @default("-") @db.VarChar(255)
-  first_name    String    @default("-") @db.VarChar(45)
-  last_name     String    @default("-") @db.VarChar(45)
+  login         String    @db.VarChar(45)
+  password      String    @db.VarChar(255)
+  first_name    String    @db.VarChar(45)
+  last_name     String    @db.VarChar(45)
   profile_photo Bytes?    @db.Blob
   status        String?   @db.VarChar(10)
   message       message[]

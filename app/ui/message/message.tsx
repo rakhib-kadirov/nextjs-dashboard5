@@ -45,6 +45,7 @@ export default function Message() {
 
     const { data: session } = useSession()
     const user = session?.user as User
+    console.log("USER: ", user)
     const userId = user?.id
     const first_name = user?.first_name
     const last_name = user?.last_name

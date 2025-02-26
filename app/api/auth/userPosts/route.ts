@@ -1,19 +1,40 @@
 import { db } from "@/app/lib/db";
 import { auth } from "@/auth";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+
+const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
     try {
         const session = await auth()
         const { body_text } = await request.json()
         const dateNow = new Date(Date.now())
-        const [result] = await db.query(
-            "INSERT INTO posts_user (users_id, body_text, date) VALUES (?, ?, ?)",
-            [session.user.id, body_text, dateNow]
-        )
+
+        // const [result] = await db.query(
+        //     "INSERT INTO posts_user (users_id, body_text, date) VALUES (?, ?, ?)",
+        //     [session?.user.id!, body_text, dateNow]
+        // )
+
+        const messages = await prisma.posts_user.create({
+            data: {
+                users_id: parseInt(session?.user.id!),
+                first_name: session?.user.first_name!,
+                last_name: session?.user.last_name!,
+                body_text: body_text,
+                date: dateNow,
+            },
+            select: {
+                users_id: true,
+                first_name: true,
+                last_name: true,
+                body_text: true,
+                date: true,
+            }
+        })
 
         return NextResponse.json(
-            { success: true, postId: (result as any).insertId },
+            { success: true, postId: (messages as any).insertId },
             { status: 201 }
         )
     } catch (error: any) {
@@ -39,7 +60,7 @@ export async function GET() {
             WHERE posts_user.users_id = ?
             ORDER BY posts_user.date DESC
         `
-        const [posts] = await db.query(sql, [session.user.id])
+        const [posts] = await db.query(sql, [session?.user.id])
 
         return NextResponse.json({ posts: posts })
     } catch (error: any) {
