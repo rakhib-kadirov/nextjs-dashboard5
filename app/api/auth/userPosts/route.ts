@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 export async function POST(request: Request) {
     try {
         const session = await auth()
-        const { body_text } = await request.json()
+        const { id_post, body_text } = await request.json()
         const dateNow = new Date(Date.now())
 
         // const [result] = await db.query(
@@ -18,6 +18,7 @@ export async function POST(request: Request) {
 
         const messages = await prisma.posts_user.create({
             data: {
+                id_post: id_post,
                 users_id: parseInt(session?.user.id as string),
                 first_name: session?.user.first_name as string,
                 last_name: session?.user.last_name as string,
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
                 date: dateNow,
             },
             select: {
+                id_post: true,
                 users_id: true,
                 first_name: true,
                 last_name: true,
