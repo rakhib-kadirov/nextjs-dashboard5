@@ -58,6 +58,7 @@ export async function POST(req: NextRequest) {
             userId: userId,
             first_name: first_name,
             last_name: last_name,
+            createdAt: new Date()
         },
         // select: {
         //     id: true,
