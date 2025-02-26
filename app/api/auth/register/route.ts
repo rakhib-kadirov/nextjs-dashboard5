@@ -3,6 +3,9 @@ import { db } from "@/app/lib/db";
 // import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt"
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
     try {
@@ -32,10 +35,25 @@ export async function POST(request: Request) {
         // password hash
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        const [result] = await db.query(
-            "INSERT INTO users (login, password, first_name, last_name) VALUES (?, ?, ?, ?)",
-            [login, hashedPassword, first_name, last_name]
-        )
+        // const [result] = await db.query(
+        //     "INSERT INTO users (login, password, first_name, last_name) VALUES (?, ?, ?, ?)",
+        //     [login, hashedPassword, first_name, last_name]
+        // )
+
+        const result = await prisma.users.create({
+            data: {
+                login: login,
+                password: hashedPassword,
+                first_name: first_name,
+                last_name: last_name,
+            },
+            select: {
+                login: true,
+                password: true,
+                first_name: true,
+                last_name: true,
+            }
+        })
 
         return NextResponse.json(
             { success: true, userId: (result as any).insertId },
