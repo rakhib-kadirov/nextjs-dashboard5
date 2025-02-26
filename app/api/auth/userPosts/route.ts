@@ -18,9 +18,9 @@ export async function POST(request: Request) {
 
         const messages = await prisma.posts_user.create({
             data: {
-                users_id: parseInt(session?.user.id!),
-                first_name: session?.user.first_name!,
-                last_name: session?.user.last_name!,
+                users_id: parseInt(session?.user.id as string),
+                first_name: session?.user.first_name as string,
+                last_name: session?.user.last_name as string,
                 body_text: body_text,
                 date: dateNow,
             },
