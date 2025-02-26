@@ -4,10 +4,12 @@ import { db } from "@/app/lib/db";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt"
 import { PrismaClient } from "@prisma/client";
+import { auth } from "@/auth";
 
 const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
+    const session = await auth()
     try {
         const { login, password, first_name, last_name } = await request.json()
 
@@ -42,12 +44,14 @@ export async function POST(request: Request) {
 
         const result = await prisma.users.create({
             data: {
+                id: parseInt(session?.user.id as string),
                 login: login,
                 password: hashedPassword,
                 first_name: first_name,
                 last_name: last_name,
             },
             select: {
+                id: true,
                 login: true,
                 password: true,
                 first_name: true,
