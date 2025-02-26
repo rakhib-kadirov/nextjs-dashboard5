@@ -6,7 +6,16 @@ const prisma = new PrismaClient()
 export async function GET() {
     try {
         const users = await prisma.users.findMany({
-            include: { message: true },
+            select: {
+                id: true,
+                login: true,
+                password: true,
+                first_name: true,
+                last_name: true,
+                profile_photo: true,
+                status: true,
+            }
+            // include: { message: true },
         })
         // const sql = "SELECT * FROM users"
         // const [users] = await db.query(sql)
