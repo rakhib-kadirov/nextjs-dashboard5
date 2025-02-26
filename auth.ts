@@ -1,4 +1,5 @@
-import NextAuth, { JWT, Session } from "next-auth";
+import NextAuth from "next-auth";
+import { JWT, Session } from "next-auth";
 // import { authConfig } from "./auth.config";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
