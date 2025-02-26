@@ -59,13 +59,13 @@ export async function POST(req: NextRequest) {
             first_name: first_name,
             last_name: last_name,
         },
-        select: {
-            id: true,
-            text: true,
-            userId: true,
-            first_name: true,
-            last_name: true,
-        }
+        // select: {
+        //     id: true,
+        //     text: true,
+        //     userId: true,
+        //     first_name: true,
+        //     last_name: true,
+        // }
     })
     return NextResponse.json(message)
 }
