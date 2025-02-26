@@ -1,4 +1,5 @@
 // import { auth } from "@/auth";
+import { auth } from "@/auth";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -38,6 +39,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+    const session = await auth()
     const { text, userId, first_name, last_name }: { text: string, userId: number, first_name: string, last_name: string } = await req.json()
 
     const user = await prisma.users.findUnique({
@@ -51,12 +53,14 @@ export async function POST(req: NextRequest) {
 
     const message = await prisma.message.create({
         data: {
+            id: parseInt(session?.user.id as string),
             text: text,
             userId: userId,
             first_name: first_name,
             last_name: last_name,
         },
         select: {
+            id: true,
             text: true,
             userId: true,
             first_name: true,
