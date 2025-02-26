@@ -38,7 +38,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-    const { text, userId, first_name, last_name } = await req.json()
+    const { text, userId, first_name, last_name }: { text: string, userId: number, first_name: string, last_name: string } = await req.json()
 
     const user = await prisma.users.findUnique({
         where: {
