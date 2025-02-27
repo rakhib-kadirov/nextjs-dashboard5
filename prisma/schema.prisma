@@ -17,7 +17,7 @@ model posts_user {
 }
 
 model users {
-  id            Int     @id
+  id            Int     @id @default(autoincrement())
   login         String  @db.Text
   password      String  @db.Text
   first_name    String  @db.Text
