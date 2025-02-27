@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     const session = await auth()
     try {
         const { login, password, first_name, last_name }: { login: string, password: string, first_name: string, last_name: string } = await request.json()
+        const id = session?.user.id as string
 
         if (!login || !password || password.length < 6) {
             console.error("Ошибка: Некорректные данные для регистрации.")
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
 
         const result = await prisma.users.create({
             data: {
-                id: parseInt(session?.user.id as string),
+                id: parseInt(id),
                 login: login,
                 password: hashedPassword,
                 first_name: first_name,
