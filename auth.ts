@@ -64,7 +64,7 @@ const prisma = new PrismaClient()
 async function getUser(login: string): Promise<User | undefined> {
     const session = await auth()
     try {
-        console.log('Login: ', login)
+        console.log('Login: ', login, " - ", session?.user.id)
         // const [user] = await db.query(`SELECT * FROM users WHERE login = ?`, [login])
         const user = prisma.users.findUnique({
             where: {
