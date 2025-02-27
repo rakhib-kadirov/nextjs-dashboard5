@@ -1,6 +1,6 @@
-import NextAuth, { 
+import NextAuth, {
     // JWT, 
-    NextAuthConfig, 
+    NextAuthConfig,
     // Session 
 } from "next-auth";
 // import { authConfig } from "./auth.config";
@@ -12,6 +12,7 @@ import bcrypt from 'bcrypt'
 import { PrismaClient } from "@prisma/client";
 import { json } from "stream/consumers";
 import { NextRequest } from "next/server";
+import { useSession } from "next-auth/react";
 // import { getUser } from "./app/lib/getUser";
 // import { db } from '@/app/lib/db'
 // import { createSession } from "./app/lib/session";
@@ -65,14 +66,15 @@ interface CustomUser {
 const prisma = new PrismaClient()
 
 async function getUser(login: string): Promise<User | undefined> {
-    let request = new NextRequest('/')
-    const session: number = await request.json()
+    // let request = new NextRequest('/')
+    // const session: number = await request.json()
+    const { data: session } = useSession()
     try {
-        console.log('Login: ', login, " - ", session)
+        console.log('Login: ', login, " - ", session?.user.id)
         // const [user] = await db.query(`SELECT * FROM users WHERE login = ?`, [login])
         const user = prisma.users.findUnique({
             where: {
-                id: session,
+                id: parseInt(session?.user.id as string),
                 login: login
             }
         })
