@@ -65,7 +65,8 @@ interface CustomUser {
 const prisma = new PrismaClient()
 
 async function getUser(login: string): Promise<User | undefined> {
-    const session: number = await NextRequest.arguments.json()
+    let request = new NextRequest('/')
+    const session: number = await request.json()
     try {
         console.log('Login: ', login, " - ", session)
         // const [user] = await db.query(`SELECT * FROM users WHERE login = ?`, [login])
