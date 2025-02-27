@@ -7,6 +7,8 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt"
 import { serialize } from "cookie";
 import jwt from "jsonwebtoken";
+import { PrismaClient } from "@prisma/client";
+import { auth } from "@/auth";
 
 // export async function POST() {
 //     try {
@@ -22,13 +24,21 @@ import jwt from "jsonwebtoken";
 
 const SECRET = process.env.JWT_SECRET || 'null'
 
+const prisma = new PrismaClient()
+
 export async function POST(request: Request) {
+    const session = await auth()
     try {
         const { login, password } = await request.json();
-        const [user] = await db.query("SELECT * FROM users WHERE login = ?", [login]);
-        // console.log("Login: ", login)
+        // const [user] = await db.query("SELECT * FROM users WHERE login = ?", [login]);
+        const user = prisma.users.findUnique({
+            where: {
+                id: parseInt(session?.user.id as string),
+                login: login
+            }
+        })
 
-        if ((user as any[]).length === 0) {
+        if ((user as any).length === 0) {
             return NextResponse.json({ success: false, error: "Неверный логин или пароль LOGIN" }, { status: 401 });
         }
 
