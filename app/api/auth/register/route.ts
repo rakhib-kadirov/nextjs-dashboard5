@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 export async function POST(request: Request) {
     const session = await auth()
     try {
-        const { login, password, first_name, last_name } = await request.json()
+        const { login, password, first_name, last_name }: { login: string, password: string, first_name: string, last_name: string } = await request.json()
 
         if (!login || !password || password.length < 6) {
             console.error("Ошибка: Некорректные данные для регистрации.")
@@ -22,11 +22,17 @@ export async function POST(request: Request) {
         }
 
         // User found
-        const [existingUser] = await db.query(
-            "SELECT * FROM users WHERE login = ?",
-            [login]
-        )
-        if ((existingUser as any[]).length > 0) {
+        // const [existingUser] = await db.query(
+        //     "SELECT * FROM users WHERE login = ?",
+        //     [login]
+        // )
+        const existingUser = prisma.users.findUnique({
+            where: {
+                id: parseInt(session?.user.id as string),
+                login: login
+            }
+        })
+        if ((existingUser as any).length > 0) {
             console.error("Ошибка: Пользователь с таким логином уже существует.")
             return NextResponse.json(
                 { success: false, error: "Пользователь с таким логином уже существует." },
