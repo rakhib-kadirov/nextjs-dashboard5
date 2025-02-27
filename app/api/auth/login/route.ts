@@ -1,7 +1,7 @@
 'use server'
 
 // import createConnection from "@/app/lib/db";
-import { db } from "@/app/lib/db";
+// import { db } from "@/app/lib/db";
 // import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt"
