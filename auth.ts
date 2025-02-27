@@ -76,7 +76,7 @@ export const authConfig: NextAuthConfig = ({
     // ...authConfig,
     providers: [
         CredentialsProvider({
-            name: "postgresql",
+            name: "Credentials",
             credentials: {
                 login: { label: "Login", type: "text" },
                 password: { label: "Password", type: "password" },
