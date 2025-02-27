@@ -124,9 +124,9 @@ export const authConfig: NextAuthConfig = ({
                 const parsedCredentials = z
                     .object({ login: z.string().min(3), password: z.string().min(6) })
                     .safeParse(credentials);
+                console.log("PARSED CREDENTIALS: ", parsedCredentials)
 
                 if (parsedCredentials.success) {
-
                     const { login, password } = parsedCredentials.data;
                     console.log("Parsed credentials: ", parsedCredentials.data);  // Логирование после парсинга
 
