@@ -12,8 +12,6 @@ export async function GET() {
                 password: true,
                 first_name: true,
                 last_name: true,
-                profile_photo: true,
-                status: true,
             }
             // include: { message: true },
         })
