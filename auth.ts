@@ -65,6 +65,7 @@ export const authConfig: NextAuthConfig = ({
                 if (parsedCredentials.success) {
                     const { login, password } = parsedCredentials.data;
                     console.log("Parsed credentials: ", parsedCredentials.data);  // Логирование после парсинга
+                    console.log("LOGIN: ", login);  // Логирование после парсинга
 
                     const user = await getUser(login)
                     if (!user) {
