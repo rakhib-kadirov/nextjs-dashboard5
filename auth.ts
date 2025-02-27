@@ -1,11 +1,16 @@
-import NextAuth, { JWT, NextAuthConfig, Session } from "next-auth";
+import NextAuth, { 
+    // JWT, 
+    NextAuthConfig, 
+    // Session 
+} from "next-auth";
 // import { authConfig } from "./auth.config";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
 // import { sql } from "@vercel/postgres";
 import type { User } from '@/app/lib/definitions'
 import bcrypt from 'bcrypt'
-import { db } from '@/app/lib/db'
+// import { db } from '@/app/lib/db'
+import { PrismaClient } from "@prisma/client";
 // import { createSession } from "./app/lib/session";
 // import { redirect } from "next/navigation";
 
@@ -54,10 +59,19 @@ interface CustomUser {
     profile_photo: string;
 }
 
+const prisma = new PrismaClient()
+
 async function getUser(login: string): Promise<User | undefined> {
+    const session = await auth()
     try {
         console.log('Login: ', login)
-        const [user] = await db.query(`SELECT * FROM users WHERE login = ?`, [login])
+        // const [user] = await db.query(`SELECT * FROM users WHERE login = ?`, [login])
+        const user = prisma.users.findUnique({
+            where: {
+                id: parseInt(session?.user.id as string),
+                login: login
+            }
+        })
         console.log('Fetched user from database: ', user); // Логирование полученного пользователя
 
         if (!Array.isArray(user) || user.length === 0) {

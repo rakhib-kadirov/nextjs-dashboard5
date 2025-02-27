@@ -35,5 +35,5 @@ model message {
   first_name    String   @db.Text
   last_name     String   @db.Text
   profile_photo String?  @db.Text
-  users users[]
+  users         users[]
 }
