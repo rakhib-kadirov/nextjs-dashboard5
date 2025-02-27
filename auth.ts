@@ -22,7 +22,7 @@ async function getUser(login: string): Promise<User | undefined> {
     // const session = await auth()
     try {
         console.log('Login: ', login)
-        const user = prisma.users.findFirst({
+        const user = prisma.users.findUnique({
             where: {
                 // id: parseInt(session?.user.id as string),
                 login: login
