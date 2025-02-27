@@ -17,15 +17,14 @@ model posts_user {
 }
 
 model users {
-  id            Int     @id @default(autoincrement())
-  login         String  @db.Text
-  password      String  @db.Text
-  first_name    String  @db.Text
-  last_name     String  @db.Text
-  profile_photo String? @db.Text
-  status        String? @db.Text
-  message       message @relation(fields: [messageId], references: [id])
-  messageId     Int
+  id            Int       @id @default(autoincrement())
+  login         String    @db.Text
+  password      String    @db.Text
+  first_name    String    @db.Text
+  last_name     String    @db.Text
+  profile_photo String?   @db.Text
+  status        String?   @db.Text
+  message       message[]
 }
 
 model message {
@@ -36,5 +35,5 @@ model message {
   first_name    String   @db.Text
   last_name     String   @db.Text
   profile_photo String?  @db.Text
-  users         users[]
+  users users[]
 }
