@@ -1,59 +1,12 @@
 import NextAuth, {
-    // JWT, 
     NextAuthConfig,
-    // Session 
 } from "next-auth";
-// import { authConfig } from "./auth.config";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
-// import { sql } from "@vercel/postgres";
 import type { User } from '@/app/lib/definitions'
 import bcrypt from 'bcrypt'
 import { PrismaClient } from "@prisma/client";
-import { json } from "stream/consumers";
-import { NextRequest } from "next/server";
-import { useSession } from "next-auth/react";
-// import { getUser } from "./app/lib/getUser";
-// import { db } from '@/app/lib/db'
-// import { createSession } from "./app/lib/session";
-// import { redirect } from "next/navigation";
 
-// export async function registerUser(login: string, password: string, first_name: string, last_name: string) {
-//     try {
-//         if (!login || !password || password.length < 6) {
-//             throw new Error("Некорректные данные для регистрации.")
-//         }
-
-//         // User found
-//         const [existingUser] = await db.query(
-//             "SELECT * FROM users WHERE login = ?",
-//             [login]
-//         )
-//         if ((existingUser as any[]).length > 0) {
-//             throw new Error("Пользователь с таким логином уже существует.")
-//         }
-
-//         // password hash
-//         const hashedPassword = await bcrypt.hash(password, 10)
-
-//         const [result] = await db.query(
-//             "INSERT INTO users (login, password, first_name, last_name) VALUES (?, ?, ?, ?)",
-//             [login, hashedPassword, first_name, last_name]
-//         )
-
-//         return {
-//             success: true,
-//             userId: (result as any).insertId
-//         }
-//     } catch (error: any) {
-//         console.error("Ошибка регистрации!", error.message)
-
-//         return {
-//             success: false,
-//             error: error.message
-//         }
-//     }
-// }
 
 interface CustomUser {
     id: string;
@@ -66,15 +19,12 @@ interface CustomUser {
 const prisma = new PrismaClient()
 
 async function getUser(login: string): Promise<User | undefined> {
-    // let request = new NextRequest('/')
-    // const session: number = await request.json()
-    const { data: session } = useSession()
+    // const session = await auth()
     try {
-        console.log('Login: ', login, " - ", session?.user.id)
-        // const [user] = await db.query(`SELECT * FROM users WHERE login = ?`, [login])
-        const user = prisma.users.findUnique({
+        console.log('Login: ', login)
+        const user = prisma.users.findFirst({
             where: {
-                id: parseInt(session?.user.id as string),
+                // id: parseInt(session?.user.id as string),
                 login: login
             }
         })
@@ -93,7 +43,6 @@ async function getUser(login: string): Promise<User | undefined> {
 }
 
 export const authConfig: NextAuthConfig = ({
-    // ...authConfig,
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -107,26 +56,7 @@ export const authConfig: NextAuthConfig = ({
                 }
 
                 console.log("Credentials received: ", credentials.login, credentials.password);  // Логирование данных
-                // if (credentials === null) return null
 
-                // try {
-                //     const user = getUser(credentials?.login as string)
-
-                //     if (user) {
-                //         const isMatch = user?.password === credentials?.password
-                //         if (isMatch) {
-                //             return user
-                //         }
-                //         else {
-                //             throw new Error ('Check your password!')
-                //         }
-                //     }
-                //     else {
-                //         throw new Error ('User not found.')
-                //     }
-                // } catch (error) {
-                //     throw new Error('Error.')
-                // }
                 const parsedCredentials = z
                     .object({ login: z.string().min(3), password: z.string().min(6) })
                     .safeParse(credentials);
@@ -148,8 +78,6 @@ export const authConfig: NextAuthConfig = ({
                         return null; // Пароль не совпал
                     }
 
-                    // await createSession(user.id)
-                    // redirect('/dashboard')
                     console.log("Returning user from authorize: ", user)
                     return {
                         id: user.id,
@@ -158,7 +86,6 @@ export const authConfig: NextAuthConfig = ({
                         last_name: user.last_name,
                         profile_photo: user.profile_photo,
                     }
-                    // return user
                 }
 
                 console.log('Invalid credentials');
@@ -176,9 +103,6 @@ export const authConfig: NextAuthConfig = ({
     },
     callbacks: {
         async jwt({ token, user }) {
-            // console.log("JWT CALLBACK - Before:", token);
-            // console.log("JWT CALLBACK - User:", user);
-
             if (user) {
                 const customUser = user as CustomUser
                 token.id = customUser.id
@@ -188,20 +112,9 @@ export const authConfig: NextAuthConfig = ({
                 token.profile_photo = customUser.profile_photo
             }
 
-            // console.log("JWT CALLBACK - After:", token);
             return token
         },
         async session({ session, token }) {
-            // console.log("SESSION CALLBACK - Token:", token);
-            // if (token) {
-            //     const [rows]: any = await db.query('SELECT id, login, first_name, last_name, profile_photo FROM users WHERE login = ?', [token.login])
-            //     if (rows && rows.length > 0) {
-            //         session.user = rows[0]
-            //     }
-            //     // session.user.id = user.id as string
-            //     // session.user.email = user.email as string
-            //     // session.user.name = user.name as string
-            // }
             (session.user as any) = {
                 ...session.user,
                 id: token.id as string,
@@ -211,7 +124,6 @@ export const authConfig: NextAuthConfig = ({
                 profile_photo: token.profile_photo as string,
             };
 
-            // console.log("SESSION CALLBACK - Session:", session);
             return session
         },
     },
