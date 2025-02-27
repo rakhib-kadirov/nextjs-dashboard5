@@ -7,10 +7,11 @@ import NextAuth, {
 import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
 // import { sql } from "@vercel/postgres";
-import type { User } from '@/app/lib/definitions'
+// import type { User } from '@/app/lib/definitions'
 import bcrypt from 'bcrypt'
+import { getUser } from "./app/lib/getUser";
 // import { db } from '@/app/lib/db'
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 // import { createSession } from "./app/lib/session";
 // import { redirect } from "next/navigation";
 
@@ -59,32 +60,32 @@ interface CustomUser {
     profile_photo: string;
 }
 
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
-async function getUser(login: string): Promise<User | undefined> {
-    const session = await auth()
-    try {
-        console.log('Login: ', login, " - ", session?.user.id)
-        // const [user] = await db.query(`SELECT * FROM users WHERE login = ?`, [login])
-        const user = prisma.users.findUnique({
-            where: {
-                id: parseInt(session?.user.id as string),
-                login: login
-            }
-        })
-        console.log('Fetched user from database: ', user); // Логирование полученного пользователя
+// async function getUser(login: string): Promise<User | undefined> {
+//     const session = await auth()
+//     try {
+//         console.log('Login: ', login, " - ", session?.user.id)
+//         // const [user] = await db.query(`SELECT * FROM users WHERE login = ?`, [login])
+//         const user = prisma.users.findUnique({
+//             where: {
+//                 id: parseInt(session?.user.id as string),
+//                 login: login
+//             }
+//         })
+//         console.log('Fetched user from database: ', user); // Логирование полученного пользователя
 
-        if (!Array.isArray(user) || user.length === 0) {
-            return undefined;
-        }
+//         if (!Array.isArray(user) || user.length === 0) {
+//             return undefined;
+//         }
 
-        console.log('USER: ', user[0])
-        return user[0] as User
-    } catch (error) {
-        console.error('Failed to fetch user: ', error)
-        throw new Error('Failed to fetch user.')
-    }
-}
+//         console.log('USER: ', user[0])
+//         return user[0] as User
+//     } catch (error) {
+//         console.error('Failed to fetch user: ', error)
+//         throw new Error('Failed to fetch user.')
+//     }
+// }
 
 export const authConfig: NextAuthConfig = ({
     // ...authConfig,
