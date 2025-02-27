@@ -146,7 +146,7 @@ export const authConfig: NextAuthConfig = ({
             },
         }),
     ],
-    secret: process.env.AUTH_SECRET || "fallback_secret",
+    secret: process.env.NEXTAUTH_SECRET || "fallback_secret",
     session: {
         strategy: 'jwt'
     },
