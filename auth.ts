@@ -22,17 +22,17 @@ async function getUser(login: string): Promise<User | undefined> {
     // const session = await auth()
     try {
         console.log('Login: ', login)
-        const user = await prisma.users.findFirst({
+        const user = await prisma.users.findUnique({
             where: { login: login }
         })
         console.log('Fetched user from database: ', user); // Логирование полученного пользователя
 
-        if (!Array.isArray(user) || user.length === 0) {
+        if (!Array.isArray([user]) || [user].length === 0) {
             return undefined;
         }
 
-        console.log('USER: ', user[0])
-        return user[0] as User
+        console.log('USER: ', [user][0])
+        return [user][0] as unknown as User
     } catch (error) {
         console.error('Failed to fetch user: ', error)
         throw new Error('Failed to fetch user.')
