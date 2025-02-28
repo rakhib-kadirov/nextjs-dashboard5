@@ -22,11 +22,8 @@ async function getUser(login: string): Promise<User | undefined> {
     // const session = await auth()
     try {
         console.log('Login: ', login)
-        const user = await prisma.users.findUnique({
-            where: {
-                // id: parseInt(session?.user.id as string),
-                login: login
-            }
+        const user = await prisma.users.findFirst({
+            where: { login: login }
         })
         console.log('Fetched user from database: ', user); // Логирование полученного пользователя
 
