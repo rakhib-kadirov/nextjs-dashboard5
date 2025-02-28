@@ -23,7 +23,7 @@ interface Message {
     profile_photo: string;
 }
 
-const socket = io("http://localhost:3001")
+const socket = io("https://rahzo.vercel.app:3001")
 // socket = io("http://26.137.137.103:3001")
 
 interface User {
