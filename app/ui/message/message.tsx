@@ -38,8 +38,8 @@ export default function Message() {
     const user = session?.user as User
     console.log("USER: ", user)
     const userId = user?.id
-    // const first_name = user?.first_name
-    // const last_name = user?.last_name
+    const first_name = user?.first_name
+    const last_name = user?.last_name
 
     const pusher = new Pusher("PUSHER_APP_KEY", {
         cluster: "eu"
@@ -61,28 +61,28 @@ export default function Message() {
     // }, []);
 
     useEffect(() => {
-        // const fetchData = async () => {
-        //     try {
-        //         const data = await fetch('/api/auth/messages')
-        //         const response: { messages: Message[] } = await data.json()
+        const fetchData = async () => {
+            try {
+                const data = await fetch('/api/auth/messages')
+                const response: { messages: Message[] } = await data.json()
 
-        //         if (Array.isArray(response.messages)) {
-        //             setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
-        //         } else {
-        //             console.error("Unexpected data format:", response);
-        //         }
+                if (Array.isArray(response.messages)) {
+                    setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+                } else {
+                    console.error("Unexpected data format:", response);
+                }
 
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // }
-        // fetchData()
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchData()
 
-        channel.bind('message', async () => {
+        channel.bind('message', async (message: Message) => {
             const data = await fetch('/api/auth/messages')
             const response: { messages: Message[] } = await data.json()
-            // setMessages((prev) => [...prev, message])
-            setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+            setMessages((prev) => [...prev, message])
+            // setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
         })
 
         return () => {
@@ -95,7 +95,8 @@ export default function Message() {
         if (!text.trim() || !userId) return;
 
         try {
-            (await fetch("/api/auth/messages")).json();
+            // (await fetch("/api/auth/messages")).json();
+            channel.emit('message', { text, userId, first_name, last_name })
             setText("");
         } catch (error) {
             console.error("Ошибка отправки сообщения: ", error);
