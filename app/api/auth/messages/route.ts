@@ -49,7 +49,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
     const session = await auth()
-    const { text, userId, first_name, last_name }: { text: string, userId: number, first_name: string, last_name: string } = await req.json()
+    const { id, text, userId, first_name, last_name }: { id: number, text: string, userId: number, first_name: string, last_name: string } = await req.json()
 
     const user = await prisma.users.findUnique({
         where: {
@@ -62,9 +62,9 @@ export async function POST(req: NextRequest) {
 
     const message = await prisma.message.create({
         data: {
-            id: parseInt(session?.user.id as string),
+            userId: parseInt(session?.user.id as string),
+            id: id,
             text: text,
-            userId: userId,
             first_name: first_name,
             last_name: last_name,
             createdAt: new Date()
