@@ -2,17 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Search from "../search";
-// import io from "socket.io-client";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import Image from "next/image";
 import { format } from "date-fns"
 import Pusher from 'pusher-js'
-
-// const socket = io('http://localhost:3001', {
-//     path: '/api/socket.io',
-//     transports: ['websocket']
-// })
 
 interface Message {
     id: number;
@@ -23,13 +17,6 @@ interface Message {
     last_name: string;
     profile_photo: string;
 }
-
-// const socket = io("wss://rahzo.vercel.app:3001")
-// socket = io("http://26.137.137.103:3001")
-const pusher = new Pusher("PUSHER_APP_KEY", {
-    cluster: "eu"
-})
-const channel = pusher.subscribe('chat')
 
 interface User {
     id: string;
@@ -44,18 +31,22 @@ interface Message {
 }
 
 export default function Message() {
-    // const [message, setMessage] = useState('')
     const [messages, setMessages] = useState<Message[]>([])
     const [text, setText] = useState("");
 
     const { data: session } = useSession()
     const user = session?.user as User
     console.log("USER: ", user)
-    // const userId = user?.id
-    // const first_name = user?.first_name
-    // const last_name = user?.last_name
+    const userId = user?.id
+    const first_name = user?.first_name
+    const last_name = user?.last_name
 
     useEffect(() => {
+        const pusher = new Pusher("PUSHER_APP_KEY", {
+            cluster: "eu"
+        })
+        const channel = pusher.subscribe('chat')
+
         // const fetchData = async () => {
         //     try {
         //         const data = await fetch('/api/auth/messages')
@@ -76,30 +67,26 @@ export default function Message() {
         channel.bind('message', (message: Message) => {
             setMessages((prev) => [...prev, message])
         })
-        // socket.on('newMessage', (message) => {
-        //     setMessages((prev) => [...prev, message])
-        // })
 
-        return () => { channel.cancelSubscription() }
+        return () => { channel.unsubscribe(); pusher.disconnect() }
     }, [])
 
     const sendMessage = async () => {
-        // socket.emit('sendMessage', { text, userId, first_name, last_name })
-        const data = await fetch('/api/auth/messages')
-        const response: { messages: Message[] } = await data.json()
-        channel.emit('message', response.messages)
-        setText('')
+        try {
+            await fetch('/api/auth/messages', {
+                method: "POST",
+                body: JSON.stringify({ text, userId, first_name, last_name }),
+                headers: { "Content-Type": "application/json" },
+            })
+            setText('')
+        } catch (error) {
+            console.error("Ошибка отправки сообщения: ", error)
+        }
     };
-
-    // const messageEndRef = useRef(null)
-    // useEffect(() => {
-    //     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-    // }, [messages])
 
     return (
         <>
             <div className="w-3/4">
-                {/* <section className="flex flex-col"> */}
                 <div className="flex flex-row box-content h-[calc(100vh-50px)] w-full">
                     <div className="w-2/5">
                         <div className="bg-white shadow-md">
@@ -163,7 +150,6 @@ export default function Message() {
                         </div>
                     </div>
                 </div>
-                {/* </section> */}
             </div>
         </>
     )

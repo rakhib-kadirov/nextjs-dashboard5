@@ -2,8 +2,17 @@
 import { auth } from "@/auth";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import Pusher from "pusher";
 
 const prisma = new PrismaClient()
+
+const pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID!,
+    key: process.env.PUSHER_APP_KEY!,
+    secret: process.env.PUSHER_APP_SECRET!,
+    cluster: "eu",
+    useTLS: true,
+});
 
 export async function GET() {
     // const session = await auth()
@@ -68,5 +77,17 @@ export async function POST(req: NextRequest) {
         //     last_name: true,
         // }
     })
+
+    const dataMsg = {
+        id: parseInt(session?.user.id as string),
+        text: text,
+        userId: userId,
+        first_name: first_name,
+        last_name: last_name,
+        createdAt: new Date()
+    }
+
+    await pusher.trigger('chat', 'message', dataMsg)
+
     return NextResponse.json(message)
 }
