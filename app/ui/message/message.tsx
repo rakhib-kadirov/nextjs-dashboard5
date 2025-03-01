@@ -78,7 +78,7 @@ export default function Message() {
         // }
         // fetchData()
 
-        channel.bind('message', async (message: Message) => {
+        channel.bind('message', async () => {
             const data = await fetch('/api/auth/messages')
             const response: { messages: Message[] } = await data.json()
             // setMessages((prev) => [...prev, message])
