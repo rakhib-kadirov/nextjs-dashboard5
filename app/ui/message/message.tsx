@@ -56,22 +56,22 @@ export default function Message() {
     const last_name = user?.last_name
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await fetch('/api/auth/messages')
-                const response: { messages: Message[] } = await data.json()
+        // const fetchData = async () => {
+        //     try {
+        //         const data = await fetch('/api/auth/messages')
+        //         const response: { messages: Message[] } = await data.json()
 
-                if (Array.isArray(response.messages)) {
-                    setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
-                } else {
-                    console.error("Unexpected data format:", response);
-                }
+        //         if (Array.isArray(response.messages)) {
+        //             setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+        //         } else {
+        //             console.error("Unexpected data format:", response);
+        //         }
 
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchData()
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // }
+        // fetchData()
 
         channel.bind('message', (message: Message) => {
             setMessages((prev) => [...prev, message])
@@ -83,9 +83,11 @@ export default function Message() {
         return () => { channel.cancelSubscription() }
     }, [])
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         // socket.emit('sendMessage', { text, userId, first_name, last_name })
-        channel.emit('message', { text, userId, first_name, last_name })
+        const data = await fetch('/api/auth/messages')
+        const response: { messages: Message[] } = await data.json()
+        channel.emit('message', response.messages)
         setText('')
     };
 
