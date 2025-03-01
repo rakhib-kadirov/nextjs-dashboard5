@@ -100,7 +100,7 @@ export default function Message() {
                             {messages.map((msg) => {
                                 const currentDate = format(msg.createdAt, 'H:mm')
                                 return (
-                                    <div className="inline-block w-full" key={msg.id}>
+                                    <div className="inline-block w-full" key={msg.id as unknown as string}>
                                         <div id="blockRight" className={msg.userId.toString() === session?.user?.id ? "text-right" : "text-left"}>
                                             <div className={clsx(
                                                 "inline-flex items-end gap-3",
