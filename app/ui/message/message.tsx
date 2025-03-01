@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Search from "../search";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import Image from "next/image";
