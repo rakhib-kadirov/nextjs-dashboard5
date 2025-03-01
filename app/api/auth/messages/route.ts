@@ -65,8 +65,8 @@ export async function POST(req: NextRequest) {
             userId: parseInt(session?.user.id as string),
             id: id,
             text: text,
-            first_name: first_name,
-            last_name: last_name,
+            first_name: session?.user.first_name as string,
+            last_name: session?.user.last_name as string,
             createdAt: new Date()
         },
         // select: {
