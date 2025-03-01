@@ -24,11 +24,11 @@ interface User {
     last_name?: string;
 }
 
-interface Message {
-    id: number;
-    text: string;
-    createdAt: string; // или Date, если уже приходит как Date
-}
+// interface Message {
+//     id: number;
+//     text: string;
+//     createdAt: string; // или Date, если уже приходит как Date
+// }
 
 export default function Message() {
     const [messages, setMessages] = useState<Message[]>([])
@@ -38,15 +38,29 @@ export default function Message() {
     const user = session?.user as User
     console.log("USER: ", user)
     const userId = user?.id
-    const first_name = user?.first_name
-    const last_name = user?.last_name
+    // const first_name = user?.first_name
+    // const last_name = user?.last_name
+
+    const pusher = new Pusher("PUSHER_APP_KEY", {
+        cluster: "eu"
+    })
+    const channel = pusher.subscribe('chat')
+
+    // useEffect(() => {
+    //     const pusher = new Pusher(process.env.PUSHER_APP_KEY!, { cluster: "eu" });
+    //     const channel = pusher.subscribe("chat");
+
+    //     channel.bind("message", (message: Message) => {
+    //         setMessages((prev) => [...prev, message]);
+    //     });
+
+    //     return () => {
+    //         channel.unsubscribe();
+    //         pusher.disconnect();
+    //     };
+    // }, []);
 
     useEffect(() => {
-        const pusher = new Pusher("PUSHER_APP_KEY", {
-            cluster: "eu"
-        })
-        const channel = pusher.subscribe('chat')
-
         // const fetchData = async () => {
         //     try {
         //         const data = await fetch('/api/auth/messages')
@@ -64,23 +78,27 @@ export default function Message() {
         // }
         // fetchData()
 
-        channel.bind('message', (message: Message) => {
-            setMessages((prev) => [...prev, message])
+        channel.bind('message', async (message: Message) => {
+            const data = await fetch('/api/auth/messages')
+            const response: { messages: Message[] } = await data.json()
+            // setMessages((prev) => [...prev, message])
+            setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
         })
 
-        return () => { channel.unsubscribe(); pusher.disconnect() }
+        return () => {
+            channel.unsubscribe();
+            pusher.disconnect();
+        }
     }, [])
 
     const sendMessage = async () => {
+        if (!text.trim() || !userId) return;
+
         try {
-            await fetch('/api/auth/messages', {
-                method: "POST",
-                body: JSON.stringify({ text, userId, first_name, last_name }),
-                headers: { "Content-Type": "application/json" },
-            })
-            setText('')
+            (await fetch("/api/auth/messages")).json();
+            setText("");
         } catch (error) {
-            console.error("Ошибка отправки сообщения: ", error)
+            console.error("Ошибка отправки сообщения: ", error);
         }
     };
 
@@ -100,7 +118,7 @@ export default function Message() {
                             {messages.map((msg) => {
                                 const currentDate = format(msg.createdAt, 'H:mm')
                                 return (
-                                    <div className="inline-block w-full" key={msg.id as unknown as string}>
+                                    <div className="inline-block w-full" key={msg.id}>
                                         <div id="blockRight" className={msg.userId.toString() === session?.user?.id ? "text-right" : "text-left"}>
                                             <div className={clsx(
                                                 "inline-flex items-end gap-3",

@@ -49,7 +49,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
     const session = await auth()
-    const { id, text, userId, first_name, last_name }: { id: number, text: string, userId: number, first_name: string, last_name: string } = await req.json()
+    const { id, text }: { id: number, text: string } = await req.json()
 
     const user = await prisma.users.findUnique({
         where: {
@@ -78,16 +78,16 @@ export async function POST(req: NextRequest) {
         // }
     })
 
-    const dataMsg = {
-        id: parseInt(session?.user.id as string),
-        text: text,
-        userId: userId,
-        first_name: first_name,
-        last_name: last_name,
-        createdAt: new Date()
-    }
+    // const dataMsg = {
+    //     id: parseInt(session?.user.id as string),
+    //     text: text,
+    //     userId: userId,
+    //     first_name: first_name,
+    //     last_name: last_name,
+    //     createdAt: new Date()
+    // }
 
-    await pusher.trigger('chat', 'message', dataMsg)
+    await pusher.trigger('chat', 'message', message)
 
     return NextResponse.json(message)
 }
