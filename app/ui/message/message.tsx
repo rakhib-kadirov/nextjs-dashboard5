@@ -6,7 +6,8 @@ import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import Image from "next/image";
 import { format } from "date-fns"
-import Pusher from 'pusher-js'
+import io, { Socket } from "socket.io-client";
+// import Pusher from 'pusher-js'
 
 interface Message {
     id: number;
@@ -24,11 +25,7 @@ interface User {
     last_name?: string;
 }
 
-// interface Message {
-//     id: number;
-//     text: string;
-//     createdAt: string; // или Date, если уже приходит как Date
-// }
+const socket = io("ws://90.156.224.56:3001")
 
 export default function Message() {
     const [messages, setMessages] = useState<Message[]>([])
@@ -41,24 +38,10 @@ export default function Message() {
     const first_name = user?.first_name
     const last_name = user?.last_name
 
-    const pusher = new Pusher("PUSHER_APP_KEY", {
-        cluster: "eu"
-    })
-    const channel = pusher.subscribe('chat')
-
-    // useEffect(() => {
-    //     const pusher = new Pusher(process.env.PUSHER_APP_KEY!, { cluster: "eu" });
-    //     const channel = pusher.subscribe("chat");
-
-    //     channel.bind("message", (message: Message) => {
-    //         setMessages((prev) => [...prev, message]);
-    //     });
-
-    //     return () => {
-    //         channel.unsubscribe();
-    //         pusher.disconnect();
-    //     };
-    // }, []);
+    // const pusher = new Pusher("PUSHER_APP_KEY", {
+    //     cluster: "eu"
+    // })
+    // const channel = pusher.subscribe('chat')
 
     useEffect(() => {
         const fetchData = async () => {
@@ -78,25 +61,23 @@ export default function Message() {
         }
         fetchData()
 
-        channel.bind('message', async (message: Message) => {
-            // const data = await fetch('/api/auth/messages')
-            // const response: { messages: Message[] } = await data.json()
+        socket.on('newMessage', (message) => {
             setMessages((prev) => [...prev, message])
-            // setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
         })
 
-        return () => {
-            channel.unsubscribe();
-            pusher.disconnect();
-        }
+        // channel.bind('message', async (message: Message) => {
+        //     // const data = await fetch('/api/auth/messages')
+        //     // const response: { messages: Message[] } = await data.json()
+        //     setMessages((prev) => [...prev, message])
+        //     // setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+        // })
+
+        return () => { socket.off('newMessage') }
     }, [])
 
-    const sendMessage = async () => {
-        if (!text.trim() || !userId) return;
-
+    const sendMessage = () => {
         try {
-            // (await fetch("/api/auth/messages")).json();
-            channel.emit('message', { text, userId, first_name, last_name })
+            socket.emit('sendMessage', { text, userId, first_name, last_name })
             setText("");
         } catch (error) {
             console.error("Ошибка отправки сообщения: ", error);

@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     //     createdAt: new Date()
     // }
 
-    await pusher.trigger('chat', 'message', message)
+    // await pusher.trigger('chat', 'message', message)
 
     return NextResponse.json(message)
 }
