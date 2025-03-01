@@ -79,8 +79,8 @@ export default function Message() {
         fetchData()
 
         channel.bind('message', async (message: Message) => {
-            const data = await fetch('/api/auth/messages')
-            const response: { messages: Message[] } = await data.json()
+            // const data = await fetch('/api/auth/messages')
+            // const response: { messages: Message[] } = await data.json()
             setMessages((prev) => [...prev, message])
             // setMessages(response.messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
         })
