@@ -13,5 +13,5 @@ RUN pnpm rebuild bcrypt
 COPY . .
 RUN pnpm prisma generate
 RUN pnpm build
-EXPOSE 443
+EXPOSE 80
 CMD ["pnpm", "start"]
