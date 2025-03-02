@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
   //   ppr: 'incremental',
   // },
   // output: 'export',
-  env: { POSTGRES_URL: process.env.POSTGRES_URL }
+  env: { POSTGRES_URL: process.env.POSTGRES_URL },
+  reactStrictMode: true,
 };
 
 export default nextConfig;
