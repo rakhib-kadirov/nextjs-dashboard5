@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:slim
 WORKDIR /
 RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV NEXTAUTH_SECRET=CHcdN7eWjiAueH2E2VjhRAsGqiXcH8AOvbFq4DTbqTU=
