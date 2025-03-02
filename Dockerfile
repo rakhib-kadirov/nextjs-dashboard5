@@ -8,7 +8,8 @@ ENV POSTGRES_URL=postgres://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darkness-
 ENV NEXT_DISABLE_ESLINT=1
 COPY package.json ./
 RUN apt-get update && apt-get install -y python3 g++ make
-RUN pnpm install --ignore-scripts
+RUN pnpm install
+RUN pnpm rebuild bcrypt
 COPY . .
 RUN pnpm prisma generate
 RUN pnpm build
