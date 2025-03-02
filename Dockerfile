@@ -7,7 +7,6 @@ ENV DATABASE_URL=postgresql://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darknes
 ENV POSTGRES_URL=postgres://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darkness-abnlisj2-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require
 ENV NEXT_DISABLE_ESLINT=1
 COPY package.json ./
-RUN pnpm install --no-frozen-lockfil
 RUN pnpm install --ignore-scripts
 COPY . .
 RUN pnpm prisma generate
