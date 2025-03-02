@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   // experimental: {
   //   ppr: 'incremental',
   // },
+  output: 'export',
   env: { POSTGRES_URL: process.env.POSTGRES_URL }
 };
 
