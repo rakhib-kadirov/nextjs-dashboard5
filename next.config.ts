@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   // experimental: {
   //   ppr: 'incremental',
   // },
-  // output: 'export',
+  output: 'standalone',
   env: { POSTGRES_URL: process.env.POSTGRES_URL },
   reactStrictMode: true,
 };
