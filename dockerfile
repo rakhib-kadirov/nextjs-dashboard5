@@ -1,8 +1,8 @@
-FROM node:alpine
+FROM node:22
 WORKDIR /app
 COPY package*.json ./
-RUN pnpm install
 COPY . .
-RUN pnpm run build
+RUN pnpm install
+RUN pnpm build
 EXPOSE 3000
 CMD ["pnpm", "start"]
