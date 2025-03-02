@@ -8,23 +8,26 @@ datasource db {
 }
 
 model posts_user {
-  id_post    Int      @id
+  id_post    Int      @id @default(autoincrement())
   users_id   Int
   body_text  String   @db.Text
   date       DateTime @db.Date
   first_name String   @db.Text
   last_name  String   @db.Text
+  users      users[]
 }
 
 model users {
-  id            Int       @id @default(autoincrement())
-  login         String    @db.Text @unique
-  password      String    @db.Text
-  first_name    String    @db.Text
-  last_name     String    @db.Text
-  profile_photo String?   @db.Text
-  status        String?   @db.Text
-  message       message[]
+  id                Int         @id @default(autoincrement())
+  login             String      @unique @db.Text
+  password          String      @db.Text
+  first_name        String      @db.Text
+  last_name         String      @db.Text
+  profile_photo     String?     @db.Text
+  status            String?     @db.Text
+  message           message[]
+  posts_user        posts_user? @relation(fields: [posts_userId_post], references: [id_post])
+  posts_userId_post Int?
 }
 
 model message {
