@@ -14,7 +14,7 @@
     "@vercel/postgres": "^0.10.0",
     "autoprefixer": "10.4.20",
     "axios": "^1.7.9",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
     "cookie": "^1.0.2",
     "date-fns": "^4.1.0",
