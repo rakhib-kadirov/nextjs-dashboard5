@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "prisma generate --schema=/prisma/schema.prisma && next build",
+    "build": "prisma generate --schema=./prisma/schema.prisma && next build",
     "dev": "concurrently \"next dev\" \"node server.js\"",
     "start": "next start",
     "lint": "next lint",
