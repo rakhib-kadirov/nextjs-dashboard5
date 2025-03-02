@@ -8,6 +8,7 @@ ENV POSTGRES_URL=postgres://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darkness-
 ENV NEXT_DISABLE_ESLINT=1
 COPY package.json ./
 RUN pnpm install --ignore-scripts
+RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm prisma generate
 RUN pnpm build
