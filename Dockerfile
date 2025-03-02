@@ -6,7 +6,6 @@ ENV JWT_SECRET=3b8bf2c24ee6418dd3d8a404d7e4cda3cf7b75175e4ec5530b7da0d91b2e0e977
 ENV DATABASE_URL=postgresql://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darkness-abnlisj2.eu-west-2.aws.neon.tech/neondb?sslmode=require
 ENV POSTGRES_URL=postgres://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darkness-abnlisj2-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require
 COPY package.json ./
-# COPY prisma /prisma/schema.prisma
 RUN pnpm install
 COPY . .
 RUN pnpm build
