@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 export async function POST(request: Request) {
     try {
         const session = await auth()
-        const { body_text, id_post, first_name, last_name } = await request.json()
+        const { body_text, id_post } = await request.json()
         const dateNow = new Date(Date.now())
         // const [result] = await db.query(
         //     "INSERT INTO posts_user (users_id, body_text, date) VALUES (?, ?, ?)",
