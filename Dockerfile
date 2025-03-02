@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node:20
 WORKDIR /
 RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV NEXTAUTH_SECRET=CHcdN7eWjiAueH2E2VjhRAsGqiXcH8AOvbFq4DTbqTU=
@@ -8,7 +8,7 @@ ENV POSTGRES_URL=postgres://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darkness-
 ENV NEXT_DISABLE_ESLINT=1
 COPY package.json ./
 RUN apt-get update && apt-get install -y python3 g++ make
-RUN pnpm install --ignore-scripts
+RUN pnpm install --frozen-lockfile --unsafe-perm
 RUN pnpm rebuild bcrypt
 COPY . .
 RUN pnpm prisma generate
