@@ -41,7 +41,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, { cors: { origin: '*' } })
+const io = new Server(server, { cors: { origin: 'http://92.118.113.115:3000' } })
 
 io.on('connection', (socket) => {
     console.log('Пользователь подключился: ', socket.id)

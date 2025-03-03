@@ -7,12 +7,12 @@ ENV JWT_SECRET=3b8bf2c24ee6418dd3d8a404d7e4cda3cf7b75175e4ec5530b7da0d91b2e0e977
 ENV DATABASE_URL=postgresql://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darkness-abnlisj2.eu-west-2.aws.neon.tech/neondb?sslmode=require
 ENV POSTGRES_URL=postgres://neondb_owner:npg_DOVyM5phxzq3@ep-sparkling-darkness-abnlisj2-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require
 ENV NEXT_DISABLE_ESLINT=1
-COPY --chown=node:node package.json package-lock.json ./
+COPY --chown=node:node package.json ./
 COPY package.json ./
 RUN apt-get update 
 RUN apt-get install -y python3 g++ make
 RUN pnpm install --ignore-scripts
-RUN pnpm install --production
+# RUN pnpm install --production
 COPY . .
 RUN pnpm prisma generate
 RUN pnpm build

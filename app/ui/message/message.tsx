@@ -25,7 +25,7 @@ interface User {
     last_name?: string;
 }
 
-const socket: Socket = io("wss://90.156.224.56:3001")
+const socket: Socket = io("ws://92.118.113.115:3001")
 
 export default function Message() {
     const [messages, setMessages] = useState<Message[]>([])
