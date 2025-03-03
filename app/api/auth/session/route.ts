@@ -9,9 +9,9 @@ export async function GET() {
 
         // console.log("SESSION:", session)
 
-        if (!session || !session.user) {
-            return NextResponse.json({ success: false, error: "Не авторизован" }, { status: 401 });
-        }
+        // if (!session || !session.user) {
+        //     return NextResponse.json({ success: false, error: "Не авторизован" }, { status: 401 });
+        // }
 
         return NextResponse.json({ success: true, user: session?.user });
 
