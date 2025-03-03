@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:slim
 WORKDIR /
 RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV NEXTAUTH_SECRET=CHcdN7eWjiAueH2E2VjhRAsGqiXcH8AOvbFq4DTbqTU=
@@ -9,9 +9,8 @@ ENV NEXT_DISABLE_ESLINT=1
 COPY package.json ./
 RUN apt-get update && apt-get install -y python3 g++ make
 RUN pnpm install --ignore-scripts
-RUN pnpm rebuild bcrypt
 COPY . .
 RUN pnpm prisma generate
 RUN pnpm build
-EXPOSE 80
+EXPOSE 3000
 CMD ["pnpm", "start"]
