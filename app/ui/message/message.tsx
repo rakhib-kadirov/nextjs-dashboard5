@@ -25,7 +25,7 @@ interface User {
     last_name?: string;
 }
 
-const socket: Socket = io("wss://rahzo.vercel.app:3001")
+const socket: Socket = io("http://31.130.148.174:8001")
 
 export default function Message() {
     const [messages, setMessages] = useState<Message[]>([])

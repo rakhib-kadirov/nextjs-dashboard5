@@ -43,7 +43,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, { cors: { origin: 'https://rahzo.vercel.app:3000' } })
+const io = new Server(server, { cors: { origin: 'https://rahzo.vercel.app' } })
 
 io.on('connection', (socket) => {
     console.log('Пользователь подключился: ', socket.id)
